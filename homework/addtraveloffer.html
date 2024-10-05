@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Travel Offer</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="vid.mp4" type="video/mp4">
+    </video>
+
+    <center><h2>Add a Travel Offer</h2></center>
+
+    <form id="offerForm">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" placeholder="E.g., Beach Vacation"><br>
+        <p id="titleer" style="color:red; display:none;">Title must be at least 3 characters.</p>
+        <p id="titlesuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <label for="destination">Destination:</label><br>
+        <input type="text" id="destination" name="destination" placeholder="E.g., Bizerte"><br>
+        <p id="deser" style="color:red; display:none;">Destination must contain only letters and spaces, at least 3 characters.</p>
+        <p id="destinationsuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <label for="departureDate">Departure Date:</label><br>
+        <input type="date" id="departureDate" name="departureDate"><br>
+        <p id="depdater" style="color:red; display:none;">Please select a valid departure date.</p>
+        <p id="departuredatesuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <label for="returnDate">Return Date:</label><br>
+        <input type="date" id="returnDate" name="returnDate"><br>
+        <p id="retdater" style="color:red; display:none;">Return date must be later than departure date.</p>
+        <p id="returndatesuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="price" placeholder="E.g., 59.99DT"><br>
+        <p id="prer" style="color:red; display:none;">Price must be a positive number.</p>
+        <p id="pricesuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <label for="checkbox">Availability:</label><br>
+        <input type="checkbox" id="checkbox" name="checkbox"><br>
+        <p id="checker" style="color:red; display:none;">Please check the availability.</p>
+        <p id="checkboxsuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <label for="category">Category:</label><br>
+        <select id="category" name="category">
+            <option value="">Select a category</option>
+            <option value="vacation">Vacation</option>
+            <option value="adventure">Adventure</option>
+            <option value="culture">Culture</option>
+            <option value="wellness">Wellness</option>
+        </select><br>
+        <p id="cater" style="color:red; display:none;">Please select a category.</p>
+        <p id="categorysuccess" style="color:green; display:none;">Correct!</p><br>
+
+        <button type="submit">Add Offer</button>
+    </form>
+
+    <script src="func.js"></script>
+</body>
+</html>
