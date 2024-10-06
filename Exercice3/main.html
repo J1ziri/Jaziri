@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de contact</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaeaea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.3s;}
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ccc;
+            border-radius: 5px; 
+            margin-bottom: 15px;
+            box-sizing: border-box; 
+            transition: border-color 0.3s; 
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            border-color: #5cb85c; 
+            outline: none;
+        }
+        input[type="submit"] {
+            background-color: #5cb85c; 
+            color: white;
+            border: none;
+            padding: 10px; 
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; 
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Formulaire de contact</h2>
+        <form action="contact.php" method="get">
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom" required>
+            
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" name="prenom" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="telephone">Téléphone:</label>
+            <input type="text" id="telephone" name="telephone" required>
+            
+            <label for="adresse">Adresse:</label>
+            <input type="text" id="adresse" name="adresse" required>
+            
+            <label for="code_postal">Code Postal:</label>
+            <input type="text" id="code_postal" name="code_postal" required>
+            
+            <input type="submit" value="Soumettre">
+        </form>
+    </div>
+</body>
+</html>
