@@ -23,33 +23,38 @@
     }
 </style>
     <?php
-    $servername="localhost"; 
-    $username="root";       
-    $password="";         
-    $dbname="contacts";   
-    $conn=new mysqli($servername, $username, $password, "contacts");
-    if($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    $servername = "localhost"; 
+    $username = "root";       
+    $password = "";         
+    $dbname = "contacts";   
+    $conn = mysql_connect($servername, $username, $password);
+    if (!$conn) {
+        die("Connection failed: " . mysql_error());
     }
+
+    mysql_select_db($dbname, $conn) or die("Could not select database: " . mysql_error());
 
     if (isset($_GET['nom']) && isset($_GET['prenom']) && isset($_GET['email']) && isset($_GET['telephone']) && isset($_GET['adresse']) && isset($_GET['code_postal'])) {
-        $nom = $_GET['nom'];
-        $prenom = $_GET['prenom'];
-        $email = $_GET['email'];
-        $telephone = $_GET['telephone'];
-        $adresse = $_GET['adresse'];
-        $code_postal = $_GET['code_postal'];
-        $sql = "INSERT INTO contacts (nom, prenom, email, telephone, adresse, code_postal)
-                VALUES ('$nom', '$prenom', '$email', '$telephone', '$adresse', '$code_postal')";  
-        if ($conn->query($sql) === TRUE) {
+        $nom = mysql_real_escape_string($_GET['nom']);
+        $prenom = mysql_real_escape_string($_GET['prenom']);
+        $email = mysql_real_escape_string($_GET['email']);
+        $telephone = mysql_real_escape_string($_GET['telephone']);
+        $adresse = mysql_real_escape_string($_GET['adresse']);
+        $code_postal = mysql_real_escape_string($_GET['code_postal']);
+
+        $sql = "INSERT INTO contacts (nom, prenom, email, telephone, adresse, code_postal) 
+                VALUES ('$nom', '$prenom', '$email', '$telephone', '$adresse', '$code_postal')";
+
+        if (mysql_query($sql, $conn)) {
             echo "<center><p style='color: green;'>Données soumises avec succès.</p></center>";
         } else {
-            echo "Erreur: " . $sql . "<br>" . $conn->error;
+            echo "Erreur: " . $sql . "<br>" . mysql_error($conn);
         }
     }
-    $result = $conn->query("SELECT * FROM contacts");
 
-    if ($result->num_rows > 0) {
+    $result = mysql_query("SELECT * FROM contacts", $conn);
+
+    if (mysql_num_rows($result) > 0) {
         echo "<table class='data-table'>
                 <tr>
                     <th>Nom</th>
@@ -60,7 +65,7 @@
                     <th>Code Postal</th>
                 </tr>";
     
-        while ($row = $result->fetch_assoc()) {
+        while ($row = mysql_fetch_assoc($result)) {
             echo "<tr>
                     <td>{$row['nom']}</td>
                     <td>{$row['prenom']}</td>
@@ -74,7 +79,8 @@
     } else {
         echo "<p>Aucune donnée trouvée.</p>";
     }
-    $conn->close();
+
+    mysql_close($conn);
     ?>
 </body>
 </html>
