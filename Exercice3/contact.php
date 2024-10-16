@@ -22,39 +22,58 @@
         display: inline-block;
     }
 </style>
-    <?php
-    $servername = "localhost"; 
-    $username = "root";       
-    $password = "";         
-    $dbname = "contacts";   
-    $conn = mysql_connect($servername, $username, $password);
-    if (!$conn) {
-        die("Connection failed: " . mysql_error());
-    }
 
-    mysql_select_db($dbname, $conn) or die("Could not select database: " . mysql_error());
+<?php
+class config {
+    private static $pdo = null;
 
-    if (isset($_GET['nom']) && isset($_GET['prenom']) && isset($_GET['email']) && isset($_GET['telephone']) && isset($_GET['adresse']) && isset($_GET['code_postal'])) {
-        $nom = mysql_real_escape_string($_GET['nom']);
-        $prenom = mysql_real_escape_string($_GET['prenom']);
-        $email = mysql_real_escape_string($_GET['email']);
-        $telephone = mysql_real_escape_string($_GET['telephone']);
-        $adresse = mysql_real_escape_string($_GET['adresse']);
-        $code_postal = mysql_real_escape_string($_GET['code_postal']);
+    public static function getConnexion() {
+        if (!isset(self::$pdo)) {
+            $servername = "localhost";
+            $username = "root";
+            $password = ""; 
+            $dbname = "contacts"; 
 
-        $sql = "INSERT INTO contacts (nom, prenom, email, telephone, adresse, code_postal) 
-                VALUES ('$nom', '$prenom', '$email', '$telephone', '$adresse', '$code_postal')";
-
-        if (mysql_query($sql, $conn)) {
-            echo "<center><p style='color: green;'>Données soumises avec succès.</p></center>";
-        } else {
-            echo "Erreur: " . $sql . "<br>" . mysql_error($conn);
+            try {
+                self::$pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            } catch (Exception $e) {
+                die('Erreur: ' . $e->getMessage());
+            }
         }
+        return self::$pdo;
     }
+}
 
-    $result = mysql_query("SELECT * FROM contacts", $conn);
+if (isset($_GET['nom']) && isset($_GET['prenom']) && isset($_GET['email']) && isset($_GET['telephone']) && isset($_GET['adresse']) && isset($_GET['code_postal'])) {
+    try {
+        $pdo = config::getConnexion();
+         $sql = "INSERT INTO contacts (nom, prenom, email, telephone, adresse, code_postal) 
+        VALUES (:nom, :prenom, :email, :telephone, :adresse, :code_postal)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':nom' => $_GET['nom'],
+            ':prenom' => $_GET['prenom'],
+            ':email' => $_GET['email'],
+            ':telephone' => $_GET['telephone'],
+            ':adresse' => $_GET['adresse'],
+            ':code_postal' => $_GET['code_postal']
+        ]);
 
-    if (mysql_num_rows($result) > 0) {
+        echo "<center><p style='color: green;'>Données soumises avec succès.</p></center>";
+
+    } catch (Exception $e) {
+        echo "Erreur: " . $e->getMessage();
+    }
+}
+
+try {
+    $pdo = config::getConnexion();
+    $sql = "SELECT * FROM contacts";
+    $stmt = $pdo->query($sql);
+    
+    if ($stmt->rowCount() > 0) {
         echo "<table class='data-table'>
                 <tr>
                     <th>Nom</th>
@@ -64,8 +83,8 @@
                     <th>Adresse</th>
                     <th>Code Postal</th>
                 </tr>";
-    
-        while ($row = mysql_fetch_assoc($result)) {
+        
+        while ($row = $stmt->fetch()) {
             echo "<tr>
                     <td>{$row['nom']}</td>
                     <td>{$row['prenom']}</td>
@@ -79,8 +98,10 @@
     } else {
         echo "<p>Aucune donnée trouvée.</p>";
     }
+} catch (Exception $e) {
+    echo "Erreur: " . $e->getMessage();
+}
+?>
 
-    mysql_close($conn);
-    ?>
 </body>
 </html>
